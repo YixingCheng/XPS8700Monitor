@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ethan.java.XPS8700Monitor.DAO.PageEntityDAO;
+import com.ethan.java.XPS8700Monitor.entities.PageEntity;
 import com.ethan.java.XPS8700Monitor.utils.NotifUtil;
 import com.ethan.java.XPS8700Monitor.utils.PageEntityRetrUtil;
 
@@ -43,6 +44,29 @@ public class MonitorServlet extends HttpServlet {
 		this.datastore = PageEntityDAO.getInstance();
 		this.notifier = new NotifUtil(senderEmail, senderName);
 		this.retriever = new PageEntityRetrUtil(userAgent);
+		
+		datastore.addUser("waldenlaker@hotmail.com");
+		try{
+			Thread.sleep(1000);
+		} catch(InterruptedException ex){
+			Thread.currentThread().interrupt();
+		}
+		
+		datastore.addObject("http://outlet.us.dell.com/ARBOnlineSales/Online/InventorySearch.aspx?c=us&cs=22&l=en&s=dfh&brandid=2202&fid=5991");
+		try{
+			Thread.sleep(1000);
+		} catch(InterruptedException ex){
+			Thread.currentThread().interrupt();
+		}
+		
+		datastore.addSubscription("waldenlaker@hotmail.com", "http://outlet.us.dell.com/ARBOnlineSales/Online/InventorySearch.aspx?c=us&cs=22&l=en&s=dfh&brandid=2202&fid=5991");
+		try{
+			Thread.sleep(1000);
+		} catch(InterruptedException ex){
+			Thread.currentThread().interrupt();
+		}
+		
+		log.info("hand-coded here!");
 	}
 	
 	@Override
@@ -58,7 +82,7 @@ public class MonitorServlet extends HttpServlet {
 	 */
 	private void run() {
 		int retrievalAttempts = 0;
-		WebObjectInstance oldInstance = null, newInstance = null;
+		PageEntity oldInstance = null, newInstance = null;
 		List<String> registeredUriList = null;
 		List<String> subscriberList = null;
 		
@@ -68,6 +92,7 @@ public class MonitorServlet extends HttpServlet {
 			do {
 				try {
 					newInstance = retriever.retrieveObject(uri);
+					break;
 				} catch (IOException e) {
 					retrievalAttempts++;
 					log.warning("I/O issue while trying to retrieve object " 
@@ -124,7 +149,7 @@ public class MonitorServlet extends HttpServlet {
 	 * @return true if the two instances match, false otherwise
 	 */
 	
-	private static boolean compareInstances(WebObjectInstance a, WebObjectInstance b) {
+	private static boolean compareInstances(PageEntity a, PageEntity b) {
 
 		String aContentType = a.getContentType();
 		String bContentType = b.getContentType();
