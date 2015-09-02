@@ -9,11 +9,14 @@ import javax.mail.internet.MimeMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class NotifUtil {
 
 	private String senderName = null;
 	private String senderEmail = null;
+	private static final Logger log = 
+			Logger.getLogger(NotifUtil.class.getName());
 	
 	/**
 	 * Constructor
@@ -21,7 +24,7 @@ public class NotifUtil {
 	 * @param senderName
 	 * @param senderEmail
 	 */
-	public NotifUtil(String senderName, String senderEmail) {
+	public NotifUtil(String senderEmail, String senderName) {
 		this.senderName = senderName;
 		this.senderEmail = senderEmail;
 	}
@@ -41,6 +44,8 @@ public class NotifUtil {
 
         try {
             Message msg = new MimeMessage(session);
+            log.info("sender Email is " + this.senderEmail);
+            log.info("sender Name is " + this.senderName);
             msg.setFrom(new InternetAddress(this.senderEmail, this.senderName));
             msg.addRecipient(Message.RecipientType.TO,
                              new InternetAddress(email));

@@ -1,12 +1,14 @@
 package com.ethan.java.XPS8700Monitor.entities;
 
 import java.util.Date;
+import java.util.List;
 
 public class PageEntity {
 	
 	private String uri = null;
 	private String content = null;
 	private String contentType = null;
+	private List<XPS8700Entity> xps8700s= null;
 	private Date timestamp = null;
 	private int statusCode = 0;
 	
@@ -17,7 +19,7 @@ public class PageEntity {
 	 * @param contentType The MIME type of the object
 	 * @param date The date the content was retrieved
 	 */
-	public PageEntity(String uri, String content, String contentType,
+	public PageEntity(String uri, String content, String contentType, List<XPS8700Entity> xps8700s,
 			Date timestamp, int statusCode) {
 		
 		if(uri == null || content == null || timestamp == null) {
@@ -26,6 +28,7 @@ public class PageEntity {
 		this.uri = uri;
 		this.content = content;
 		this.contentType = contentType;
+		this.xps8700s = xps8700s;
 		this.timestamp = timestamp;
 		this.statusCode = statusCode;
 	}

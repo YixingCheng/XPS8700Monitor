@@ -8,11 +8,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import com.ethan.java.XPS8700Monitor.entities.PageEntity;
+import com.ethan.java.XPS8700Monitor.servlets.MonitorServlet;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class PageEntityRetrUtil {
 	
+	private static final Logger log = 
+			Logger.getLogger(PageEntityRetrUtil.class.getName());
 	private String userAgent = null;
 
 	/**
@@ -61,7 +70,24 @@ public class PageEntityRetrUtil {
 	    	connection.disconnect();
 	    }
 		timestamp = new Date();
-		content = contentBuilder.toString();
+		
+		String rawPage = null;
+		rawPage = contentBuilder.toString();
+		
+		//start to parse the HTML to find the difference
+		Document htmldom = Jsoup.parse(rawPage);
+		Element targetDiv = htmldom.body().select("div[style*=width: 790px]").first();
+		Element numBarEle = targetDiv.select("table div[style*=float:left]").first();
+		content = numBarEle.text();
+		
+		Elements xpsConfigEles = htmldom.body().select("td.para");
+		Elements xpsPrices = htmldom.body().select("td[style*=width: 25%]");
+		
+		for(int i = 0; i < xpsConfigEles.size(); i++){
+			
+		}
+		
+		log.info("the page content is " + content);
 		
 		return new PageEntity(uri, content, contentType, 
 				timestamp, statusCode);

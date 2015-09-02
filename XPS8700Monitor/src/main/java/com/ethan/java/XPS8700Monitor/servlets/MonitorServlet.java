@@ -37,8 +37,12 @@ public class MonitorServlet extends HttpServlet {
 		super.init(config);
 		/* Get all config parameters */
 		String userAgent = config.getInitParameter("retriever.userAgent");
-		String senderName = config.getInitParameter("notifer.senderName");
-		String senderEmail = config.getInitParameter("notifer.senderEmail");
+		String senderName = config.getInitParameter("notifier.senderName");
+		String senderEmail = config.getInitParameter("notifier.senderEmail");
+		
+		log.info("sender Name is" + senderName);
+		log.info("sender Emails is" + senderEmail);
+		
 		
 		/* Instantiate all services required */
 		this.datastore = PageEntityDAO.getInstance();
